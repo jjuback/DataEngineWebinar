@@ -1,0 +1,104 @@
+﻿@page "/touchdowns"
+
+@using NFLStats.Data
+@inject QueryService TouchdownsService
+
+<h1>Touchdowns</h1>
+
+@if (touchdowns == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>
+                    <select @oninput="CategoryChange">
+                        <option value="passing">Passing</option>
+                        <option value="rushing">Rushing</option>
+                        <option value="receiving">Receiving</option>
+                    </select>
+                    <select @oninput="TeamChange">
+                        <option value="">(All teams)</option>
+                        <option value="ARI">Arizona</option>
+                        <option value="ATL">Atlanta</option>
+                        <option value="BAL">Baltimore</option>
+                        <option value="BUF">Buffalo</option>
+                        <option value="CAR">Carolina</option>
+                        <option value="CHI">Chicago</option>
+                        <option value="CIN">Cincinnati</option>
+                        <option value="CLE">Cleveland</option>
+                        <option value="DAL">Dallas</option>
+                        <option value="DEN">Denver</option>
+                        <option value="DET">Detroit</option>
+                        <option value="GB">Green Bay</option>
+                        <option value="HOU">Houston</option>
+                        <option value="IND">Indianapolis</option>
+                        <option value="JA">Jacksonville</option>
+                        <option value="KC">Kansas City</option>
+                        <option value="LA">Los Angeles</option>
+                        <option value="MIA">Miami</option>
+                        <option value="MIN">Minnesota</option>
+                        <option value="NE">New England</option>
+                        <option value="NO">New Orleans</option>
+                        <option value="NYG">New York Giants</option>
+                        <option value="NYJ">New York Jets</option>
+                        <option value="OAK">Oakland</option>
+                        <option value="PHI">Philadelphia</option>
+                        <option value="PIT">Pittsburgh</option>
+                        <option value="SD">San Diego</option>
+                        <option value="SF">San Francisco</option>
+                        <option value="SEA">Seattle</option>
+                        <option value="STL">St. Louis</option>
+                        <option value="TB">Tampa Bay</option>
+                        <option value="TEN">Tennessee</option>
+                        <option value="WAS">Washington</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p/>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (dynamic td in touchdowns)
+            {
+                <tr>
+                    <td>@td.player</td>
+                    <td>@td.count.ToString("N0")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<object> touchdowns;
+    private string category = null;
+    private string team = null;
+
+    private async Task CategoryChange(ChangeEventArgs e)
+    {
+        category = e.Value.ToString();
+        touchdowns = await TouchdownsService.GetTouchdownsAsync(category, team);
+    }
+
+    private async Task TeamChange(ChangeEventArgs e)
+    {
+        team = e.Value.ToString();
+        touchdowns = await TouchdownsService.GetTouchdownsAsync(category, team);
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        touchdowns = await TouchdownsService.GetTouchdownsAsync();
+    }
+}

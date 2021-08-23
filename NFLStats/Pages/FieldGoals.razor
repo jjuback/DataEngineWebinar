@@ -1,0 +1,40 @@
+@page "/fieldgoals"
+
+@using NFLStats.Data
+@inject QueryService FieldGoalsService
+
+<h1>Field Goals</h1>
+
+@if (fieldgoals == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Result</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (dynamic fg in fieldgoals)
+            {
+                <tr>
+                    <td>@fg.result</td>
+                    <td>@fg.count.ToString("N0")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<object> fieldgoals;
+
+    protected override async Task OnInitializedAsync()
+    {
+        fieldgoals = await FieldGoalsService.GetFieldGoalsAsync();
+    }
+}
