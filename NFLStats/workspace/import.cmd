@@ -10,4 +10,4 @@
 dotnet tool install -g C1.DataEngine.Tool
 
 # Run this command to import the data:
-c1dataengine table Plays --provider csv --connection "URI=NFL Play by Play 2009-2018 (v5).csv"
+c1dataengine table Plays --provider csv --connect "URI=NFL Play by Play 2009-2018 (v5).csv"

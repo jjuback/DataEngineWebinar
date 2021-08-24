@@ -1,3 +1,5 @@
 bin
 obj
+workspace
+!workspace/import.cmd
 .DS_Store
